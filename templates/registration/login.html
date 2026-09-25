@@ -1,1 +1,28 @@
-
+{% extends 'base.html' %}
+{% block title %}ورود | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto animate-fade">
+    <div class="glass-card p-8">
+        <div class="text-center mb-8">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl mb-3">🔐</div>
+            <h1 class="text-2xl font-bold">ورود به حساب</h1>
+        </div>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% for field in form %}
+            <div>
+                <label class="block text-sm opacity-70 mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<p class="text-red-300 text-xs mt-1">{{ field.errors.0 }}</p>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold mt-2">ورود</button>
+        </form>
+        <p class="text-center text-sm opacity-60 mt-6">حساب نداری؟ <a href="{% url 'register' %}" class="text-indigo-400 hover:underline">ثبت‌نام رایگان</a></p>
+    </div>
+</div>
+<style>
+    input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 0.75rem; padding: 0.75rem 1rem; color: white; outline: none; }
+    input:focus { border-color: #818cf8; }
+</style>
+{% endblock %}

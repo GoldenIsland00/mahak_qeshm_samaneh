@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}ثبت بسته | افیلیت پرو{% endblock %}
+{% block extra_head %}
+<style>
+    .field {
+        width: 100%;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 0.875rem;
+        padding: 0.875rem 1rem;
+        color: white;
+        outline: none;
+        transition: all 0.2s;
+        font-size: 0.95rem;
+    }
+    .field:focus {
+        border-color: rgba(99,102,241,0.7);
+        background: rgba(255,255,255,0.12);
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+    }
+    .field::placeholder { color: rgba(255,255,255,0.35); }
+    .err { color: #f87171; font-size: 0.75rem; margin-top: 0.35rem; }
+    .step-icon {
+        width: 3.5rem; height: 3.5rem;
+        border-radius: 1rem;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 1rem;
+        background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3));
+        border: 1px solid rgba(99,102,241,0.4);
+    }
+    .info-box {
+        background: rgba(99,102,241,0.1);
+        border: 1px solid rgba(99,102,241,0.25);
+        border-radius: 0.875rem;
+        padding: 0.875rem 1rem;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.7);
+    }
+    .ref-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+        border: 1px solid rgba(99,102,241,0.35);
+        padding: 0.4rem 0.9rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        color: #a5b4fc;
+        margin-top: 0.75rem;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto animate-fade px-1">
+    <div class="glass-card p-6 md:p-9 overflow-hidden relative">
+        <!-- decorative glow -->
+        <div class="absolute -top-20 -left-20 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -right-16 w-36 h-36 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative text-center mb-8">
+            <div class="step-icon">📦</div>
+            <h1 class="text-2xl md:text-3xl font-bold tracking-tight">ثبت بسته</h1>
+            <p class="text-sm opacity-55 mt-2 leading-relaxed max-w-xs mx-auto">
+                اطلاعات خود را وارد کنید تا بسته برای شما ثبت و توسط تیم بررسی شود
+            </p>
+            {% if ref_code %}
+            <div class="ref-badge">
+                <span>معرف:</span>
+                <strong class="tracking-widest font-mono">{{ ref_code }}</strong>
+            </div>
+            {% else %}
+            <div class="ref-badge" style="opacity:0.7">
+                <span>ثبت مستقیم</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <form method="post" class="relative space-y-5" novalidate id="lead-form">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm opacity-70 mb-1.5">{{ form.first_name.label }} <span class="text-red-400">*</span></label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}<p class="err">{{ form.first_name.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm opacity-70 mb-1.5">{{ form.last_name.label }} <span class="text-red-400">*</span></label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}<p class="err">{{ form.last_name.errors.0 }}</p>{% endif %}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm opacity-70 mb-1.5">{{ form.phone.label }} <span class="text-red-400">*</span></label>
+                {{ form.phone }}
+                {% if form.phone.errors %}<p class="err">{{ form.phone.errors.0 }}</p>{% endif %}
+            </div>
+
+            <div>
+                <label class="block text-sm opacity-70 mb-1.5">{{ form.job_class.label }} <span class="text-red-400">*</span></label>
+                {{ form.job_class }}
+                {% if form.job_class.errors %}<p class="err">{{ form.job_class.errors.0 }}</p>{% endif %}
+                <p class="text-xs opacity-40 mt-1.5">مثال: پوشاک · لوازم الکترونیکی · خدمات زیبایی · مواد غذایی</p>
+            </div>
+
+            <div class="info-box">
+                پس از ثبت، وضعیت شما «بررسی‌نشده» خواهد بود. تیم ما بررسی می‌کند و در صورت تأیید با شما تماس می‌گیرد. دسترسی کامل به پنل فقط توسط ادمین فعال می‌شود.
+            </div>
+
+            <button type="submit" class="w-full btn-primary py-3.5 rounded-xl font-bold text-base mt-1 flex items-center justify-center gap-2">
+                <span>ثبت بسته</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+        </form>
+
+        <p class="relative text-center text-xs opacity-40 mt-7 leading-relaxed">
+            با ثبت اطلاعات، شرایط استفاده را می‌پذیرید.
+            {% if not user.is_authenticated %}
+            <br>قبلاً حساب دارید؟ <a href="{% url 'login' %}" class="text-indigo-400 hover:underline">ورود</a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}
