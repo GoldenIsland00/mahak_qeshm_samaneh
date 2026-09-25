@@ -1,0 +1,16 @@
+{
+  "name": "افیلیت پرو",
+  "short_name": "افیلیت‌پرو",
+  "description": "سیستم بازاریابی چندسطحی حرفه‌ای",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0c29",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "lang": "fa",
+  "dir": "rtl",
+  "icons": [
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
