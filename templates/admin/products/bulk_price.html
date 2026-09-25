@@ -1,1 +1,26 @@
-
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>{{ title }}</h1>
+<form method="post" style="max-width:500px; margin-top:20px;">
+    {% csrf_token %}
+    <fieldset class="module aligned">
+        {% for field in form %}
+        <div class="form-row">
+            <div>
+                <label>{{ field.label }}:</label>
+                {{ field }}
+                {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
+                {{ field.errors }}
+            </div>
+        </div>
+        {% endfor %}
+    </fieldset>
+    <div class="submit-row">
+        <input type="submit" value="اعمال افزایش قیمت" class="default">
+        <a href="{% url 'admin:products_package_changelist' %}" class="button cancel-link">انصراف</a>
+    </div>
+</form>
+<p style="margin-top:20px; color:#666;">
+    این عملیات روی <strong>همه بسته‌ها</strong> اعمال می‌شود. قبل از اجرا مطمئن شوید.
+</p>
+{% endblock %}
