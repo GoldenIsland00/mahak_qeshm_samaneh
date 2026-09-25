@@ -1,0 +1,131 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | افیلیت پرو{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        🚀 افیلیت پرو
+        <span style="font-size:13px; opacity:0.7; font-weight:normal;">پنل مدیریت</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --primary: #4f46e5;
+        --primary-fg: #fff;
+        --header-bg: #1e1b4b;
+        --header-color: #e0e7ff;
+        --accent: #6366f1;
+        --body-bg: #f1f5f9;
+        --darkened-bg: #e2e8f0;
+        --selected-bg: #c7d2fe;
+        --link-fg: #4338ca;
+        --link-hover-color: #312e81;
+    }
+    #header {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+        border-bottom: 3px solid #6366f1;
+    }
+    #branding h1, #branding h1 a { color: #e0e7ff !important; font-weight: 700; }
+    #user-tools { color: #c7d2fe !important; }
+    #user-tools a { color: #a5b4fc !important; }
+    .module h2, .module caption, inline-group h2 {
+        background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+        color: white !important;
+    }
+    div.breadcrumbs {
+        background: #312e81 !important;
+        color: #c7d2fe !important;
+    }
+    div.breadcrumbs a { color: #a5b4fc !important; }
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: #4f46e5 !important;
+        border-radius: 8px !important;
+    }
+    .button:hover, input[type=submit]:hover { background: #4338ca !important; }
+    .button.default, input[type=submit].default { background: #16a34a !important; }
+    #changelist-filter h2 { background: #4f46e5 !important; }
+    .object-tools a:link, .object-tools a:visited {
+        background: #4f46e5 !important;
+        border-radius: 8px !important;
+    }
+
+    /* Status row coloring */
+    tr.row-pending { background: #fef2f2 !important; }
+    tr.row-reviewed { background: #fefce8 !important; }
+    tr.row-purchased { background: #f0fdf4 !important; }
+
+    /* Better list display */
+    #result_list td, #result_list th {
+        vertical-align: middle !important;
+        padding: 10px 8px !important;
+    }
+    #result_list th {
+        white-space: nowrap;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+        #changelist-filter {
+            width: 100% !important;
+            margin: 0 0 15px 0 !important;
+        }
+        #changelist .actions {
+            flex-wrap: wrap;
+        }
+        #result_list {
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .object-tools {
+            margin-bottom: 10px;
+        }
+        #content {
+            padding: 10px !important;
+        }
+        #header {
+            padding: 10px 15px !important;
+        }
+        #branding h1 { font-size: 16px !important; }
+    }
+
+    /* Status legend */
+    .status-legend {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        font-size: 13px;
+    }
+    .status-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+    .status-legend .pending { background: #fef2f2; color: #dc2626; }
+    .status-legend .reviewed { background: #fefce8; color: #ca8a04; }
+    .status-legend .purchased { background: #f0fdf4; color: #16a34a; }
+
+    /* Make select and inputs nicer */
+    select, input[type=text], input[type=date] {
+        border-radius: 6px !important;
+        border: 1px solid #d1d5db !important;
+        padding: 6px 10px !important;
+    }
+</style>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

@@ -1,1 +1,32 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
 
+{% block content %}
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px;">
+    {% if unread_withdrawals is not None %}
+    <div style="background:linear-gradient(135deg,#dc2626,#ef4444); color:white; padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(220,38,38,0.3);">
+        <div style="font-size:13px; opacity:0.9;">درخواست برداشت خوانده‌نشده</div>
+        <div style="font-size:32px; font-weight:bold; margin-top:4px;">{{ unread_withdrawals }}</div>
+    </div>
+    {% endif %}
+    {% if total_users is not None %}
+    <div style="background:linear-gradient(135deg,#4f46e5,#6366f1); color:white; padding:20px; border-radius:12px;">
+        <div style="font-size:13px; opacity:0.9;">کل کاربران</div>
+        <div style="font-size:32px; font-weight:bold; margin-top:4px;">{{ total_users }}</div>
+    </div>
+    {% endif %}
+    {% if total_orders is not None %}
+    <div style="background:linear-gradient(135deg,#16a34a,#22c55e); color:white; padding:20px; border-radius:12px;">
+        <div style="font-size:13px; opacity:0.9;">سفارشات پرداخت‌شده</div>
+        <div style="font-size:32px; font-weight:bold; margin-top:4px;">{{ total_orders }}</div>
+    </div>
+    {% endif %}
+    {% if total_commission is not None %}
+    <div style="background:linear-gradient(135deg,#ca8a04,#eab308); color:#111; padding:20px; border-radius:12px;">
+        <div style="font-size:13px; opacity:0.9;">مجموع کمیسیون‌ها</div>
+        <div style="font-size:28px; font-weight:bold; margin-top:4px;">{{ total_commission|floatformat:0 }}</div>
+    </div>
+    {% endif %}
+</div>
+{{ block.super }}
+{% endblock %}
