@@ -1,1 +1,13 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
 
+{% block content_title %}
+<h1>{{ title }}</h1>
+{% if status_counts %}
+<div class="status-legend">
+    <span class="pending">🔴 بررسی‌نشده: {{ status_counts.pending }}</span>
+    <span class="reviewed">🟡 بررسی‌شده: {{ status_counts.reviewed }}</span>
+    <span class="purchased">🟢 خریده: {{ status_counts.purchased }}</span>
+</div>
+{% endif %}
+{% endblock %}
