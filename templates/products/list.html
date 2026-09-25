@@ -1,1 +1,23 @@
-
+{% extends 'base.html' %}
+{% block title %}بسته‌ها | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="animate-fade">
+    <h1 class="text-2xl font-bold mb-6 text-center">بسته‌های قابل خرید</h1>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for p in packages %}
+        <div class="glass-card p-6 stat-card flex flex-col">
+            <div class="flex justify-between items-start mb-3">
+                <h3 class="text-lg font-bold">{{ p.name }}</h3>
+                {% if p.is_featured %}<span class="text-xs bg-gradient-to-l from-indigo-500 to-purple-500 px-2 py-0.5 rounded-full">ویژه</span>{% endif %}
+            </div>
+            <p class="text-3xl font-bold text-indigo-300 mb-1">{{ p.price|floatformat:0 }} <span class="text-sm opacity-50">تومان</span></p>
+            <p class="text-xs opacity-50 mb-3">پشتیبانی {{ p.duration_days }} روزه · تمدید: {{ p.support_price|floatformat:0 }} امتیاز</p>
+            <p class="text-sm opacity-70 flex-1 mb-4">{{ p.description|truncatewords:20 }}</p>
+            <a href="{% url 'package_detail' p.slug %}" class="btn-primary text-center py-2.5 rounded-xl text-sm font-medium">جزئیات و خرید</a>
+        </div>
+        {% empty %}
+        <p class="col-span-full text-center opacity-50 py-12">بسته‌ای تعریف نشده</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

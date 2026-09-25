@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{ package.name }} | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto animate-fade">
+    <div class="glass-card p-6">
+        <h1 class="text-2xl font-bold mb-2">{{ package.name }}</h1>
+        <p class="text-3xl font-bold text-indigo-300 mb-4">{{ package.price|floatformat:0 }} <span class="text-base opacity-50">تومان</span></p>
+        <div class="space-y-2 text-sm opacity-70 mb-6">
+            <p>⏱ مدت پشتیبانی: {{ package.duration_days }} روز</p>
+            <p>🛡️ قیمت تمدید: {{ package.support_price|floatformat:0 }} امتیاز</p>
+            <p>🎁 امتیاز هدیه: {{ package.points_reward|floatformat:0 }}</p>
+        </div>
+        <p class="mb-6 opacity-80">{{ package.description }}</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'buy_package' package.slug %}" class="block w-full btn-primary text-center py-3 rounded-xl font-bold">خرید این بسته</a>
+        {% else %}
+        <a href="{% url 'register' %}" class="block w-full btn-primary text-center py-3 rounded-xl font-bold">ثبت‌نام و خرید</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

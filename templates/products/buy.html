@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}خرید {{ package.name }}{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto animate-fade">
+    <div class="glass-card p-6">
+        <h1 class="text-xl font-bold mb-4">خرید {{ package.name }}</h1>
+        <p class="text-2xl font-bold text-indigo-300 mb-6">{{ package.price|floatformat:0 }} تومان</p>
+        <form method="post" class="space-y-3">
+            {% csrf_token %}
+            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold">پرداخت آنلاین (دمو)</button>
+            {% if profile.level != 'bronze' and profile.points >= package.price %}
+            <button type="submit" name="pay_with_points" value="1" class="w-full glass py-3 rounded-xl font-medium hover:bg-white/15">پرداخت با امتیاز ({{ profile.points|floatformat:0 }} موجود)</button>
+            {% endif %}
+        </form>
+        <p class="text-xs opacity-40 mt-4 text-center">در نسخه واقعی به درگاه پرداخت متصل می‌شود</p>
+    </div>
+</div>
+{% endblock %}
