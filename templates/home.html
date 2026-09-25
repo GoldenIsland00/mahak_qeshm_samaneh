@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}خانه | افیلیت پرو{% endblock %}
+{% block content %}
+<section class="text-center py-12 animate-fade">
+    <div class="inline-block px-4 py-1.5 rounded-full glass text-sm mb-6 text-indigo-300">🚀 سیستم بازاریابی چندسطحی حرفه‌ای</div>
+    <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+        کسب درآمد با<br>
+        <span class="bg-gradient-to-l from-indigo-400 to-purple-400 bg-clip-text text-transparent">معرفی دوستان</span>
+    </h1>
+    <p class="text-lg opacity-70 max-w-xl mx-auto mb-8">با سیستم سه‌سطحی برنزی، نقره‌ای و طلایی، از هر فروش کمیسیون بگیر و به سطح بالاتر برو.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+        <a href="{% url 'register' %}" class="btn-primary px-8 py-3.5 rounded-2xl font-bold text-lg">ثبت بسته</a>
+        <a href="{% url 'packages' %}" class="glass px-8 py-3.5 rounded-2xl font-medium hover:bg-white/15">مشاهده بسته‌ها</a>
+    </div>
+</section>
+
+<!-- Levels -->
+<section class="grid md:grid-cols-3 gap-6 my-16">
+    <div class="glass-card p-6 text-center stat-card">
+        <div class="w-16 h-16 mx-auto rounded-2xl level-bronze flex items-center justify-center text-2xl mb-4">🥉</div>
+        <h3 class="text-xl font-bold mb-2">برنزی</h3>
+        <p class="text-3xl font-bold text-orange-300 mb-2">۵٪</p>
+        <p class="text-sm opacity-60 mb-4">کمیسیون از هر فروش</p>
+        <ul class="text-sm opacity-70 space-y-1 text-right">
+            <li>✓ شروع از صفر</li>
+            <li>✓ درخواست تمدید پشتیبانی</li>
+            <li>✓ ارتقا بعد از ۱۰ فروش</li>
+        </ul>
+    </div>
+    <div class="glass-card p-6 text-center stat-card border-indigo-400/30 relative">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-indigo-500 text-xs font-bold">محبوب</div>
+        <div class="w-16 h-16 mx-auto rounded-2xl level-silver flex items-center justify-center text-2xl mb-4">🥈</div>
+        <h3 class="text-xl font-bold mb-2">نقره‌ای</h3>
+        <p class="text-3xl font-bold text-gray-200 mb-2">۱۰٪</p>
+        <p class="text-sm opacity-60 mb-4">کمیسیون از هر فروش</p>
+        <ul class="text-sm opacity-70 space-y-1 text-right">
+            <li>✓ خرید بسته با امتیاز</li>
+            <li>✓ ارتقا سطح</li>
+            <li>✓ ارتقا بعد از ۲۰ فروش</li>
+        </ul>
+    </div>
+    <div class="glass-card p-6 text-center stat-card">
+        <div class="w-16 h-16 mx-auto rounded-2xl level-gold flex items-center justify-center text-2xl mb-4">🥇</div>
+        <h3 class="text-xl font-bold mb-2">طلایی</h3>
+        <p class="text-3xl font-bold text-yellow-300 mb-2">۱۲٪</p>
+        <p class="text-sm opacity-60 mb-4">کمیسیون از هر فروش</p>
+        <ul class="text-sm opacity-70 space-y-1 text-right">
+            <li>✓ برداشت پول</li>
+            <li>✓ همه امکانات قبلی</li>
+            <li>✓ بالاترین سطح</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Packages Preview -->
+{% if packages %}
+<section class="my-12">
+    <h2 class="text-2xl font-bold mb-6 text-center">بسته‌های ویژه</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+        {% for p in packages %}
+        <div class="glass-card p-5 stat-card">
+            <div class="flex justify-between items-start mb-3">
+                <h3 class="font-bold text-lg">{{ p.name }}</h3>
+                {% if p.is_featured %}<span class="text-xs bg-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded-full">ویژه</span>{% endif %}
+            </div>
+            <p class="text-2xl font-bold text-indigo-300 mb-2">{{ p.price|floatformat:0 }} <span class="text-sm opacity-60">تومان</span></p>
+            <p class="text-sm opacity-50 mb-4 line-clamp-2">{{ p.description|truncatewords:15 }}</p>
+            <a href="{% url 'package_detail' p.slug %}" class="block text-center btn-primary py-2.5 rounded-xl text-sm font-medium">مشاهده و خرید</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

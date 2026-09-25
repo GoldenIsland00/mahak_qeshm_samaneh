@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>{% block title %}افیلیت پرو | سیستم بازاریابی چندسطحی{% endblock %}</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" href="/static/icons/icon-192.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'},
+                        bronze: '#cd7f32',
+                        silver: '#c0c0c0',
+                        gold: '#ffd700',
+                    },
+                    fontFamily: { vazir: ['Vazirmatn', 'Tahoma', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        * { font-family: 'Vazirmatn', Tahoma, sans-serif; }
+        body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); min-height: 100vh; }
+        .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12); }
+        .glass-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.15); border-radius: 1.25rem; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); transition: all 0.3s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(99,102,241,0.4); }
+        .level-bronze { background: linear-gradient(135deg, #cd7f32, #a05a2c); }
+        .level-silver { background: linear-gradient(135deg, #e8e8e8, #a8a8a8); color: #333; }
+        .level-gold { background: linear-gradient(135deg, #ffd700, #f0a500); color: #333; }
+        .progress-bar { transition: width 1s ease-in-out; }
+        .stat-card { transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-4px); }
+        input, select, textarea { direction: rtl; }
+        .animate-fade { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-blur { backdrop-filter: blur(12px); background: rgba(15,12,41,0.85); }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="text-white antialiased">
+    <!-- Navbar -->
+    <nav class="nav-blur sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="{% url 'home' %}" class="flex items-center gap-2 font-bold text-xl">
+                <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-lg">🚀</span>
+                <span>افیلیت<span class="text-indigo-400">پرو</span></span>
+            </a>
+            <div class="flex items-center gap-3">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="text-sm opacity-80 hover:opacity-100">داشبورد</a>
+                    <a href="{% url 'packages' %}" class="text-sm opacity-80 hover:opacity-100">بسته‌ها</a>
+                    <div class="relative group">
+                        <button class="flex items-center gap-2 glass px-3 py-1.5 rounded-full text-sm">
+                            <span class="w-7 h-7 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold">{{ user.first_name|slice:":1"|default:user.username|slice:":1"|upper }}</span>
+                            {{ user.first_name|default:user.username }}
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 glass-card py-2 hidden group-hover:block shadow-xl">
+                            <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-white/10 text-sm">پروفایل</a>
+                            <a href="{% url 'wallet' %}" class="block px-4 py-2 hover:bg-white/10 text-sm">کیف پول</a>
+                            <a href="{% url 'referral' %}" class="block px-4 py-2 hover:bg-white/10 text-sm">لینک معرف</a>
+                            <hr class="border-white/10 my-1">
+                            <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-white/10 text-sm text-red-300">خروج</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-sm opacity-80 hover:opacity-100">ورود</a>
+                    <a href="{% url 'register' %}" class="btn-primary px-4 py-2 rounded-xl text-sm font-medium">ثبت بسته</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-6xl mx-auto px-4 mt-4 space-y-2">
+        {% for message in messages %}
+        <div class="glass-card px-4 py-3 flex items-center justify-between animate-fade
+            {% if message.tags == 'error' %}border-red-400/40 text-red-200{% elif message.tags == 'success' %}border-green-400/40 text-green-200{% else %}border-indigo-400/40{% endif %}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" class="opacity-60 hover:opacity-100">✕</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Content -->
+    <main class="max-w-6xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 mt-12 py-8 text-center text-sm opacity-50">
+        <p>© ۱۴۰۵ افیلیت پرو — سیستم بازاریابی چندسطحی حرفه‌ای</p>
+    </footer>
+
+    <script>
+        // PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js').catch(()=>{});
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
