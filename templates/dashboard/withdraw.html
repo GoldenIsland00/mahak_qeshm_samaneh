@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}برداشت | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto animate-fade">
+    <div class="glass-card p-6">
+        <h1 class="text-xl font-bold mb-2">درخواست برداشت از کیف پول</h1>
+        <p class="text-sm opacity-60 mb-6">موجودی قابل برداشت: <strong class="text-green-300 text-lg">{{ profile.wallet_balance|floatformat:0 }}</strong> تومان</p>
+        
+        {% if profile.wallet_balance < 50000 %}
+        <div class="bg-red-500/20 border border-red-400/30 rounded-xl p-4 text-sm text-red-200 mb-4">
+            حداقل مبلغ برداشت ۵۰٬۰۰۰ تومان است. موجودی شما کافی نیست.
+        </div>
+        {% else %}
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-sm opacity-70 mb-1.5">مبلغ درخواستی (تومان)</label>
+                <input type="number" name="amount" min="50000" max="{{ profile.wallet_balance }}" required
+                    class="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-3 outline-none focus:border-indigo-400"
+                    placeholder="حداقل ۵۰,۰۰۰">
+            </div>
+            <div>
+                <label class="block text-sm opacity-70 mb-1.5">شماره کارت ۱۶ رقمی</label>
+                <input type="text" name="bank_card" maxlength="16" required pattern="[0-9]{16}"
+                    class="w-full bg-white/10 border border-white/15 rounded-xl px-4 py-3 outline-none focus:border-indigo-400"
+                    placeholder="6037xxxxxxxxxxxx" value="{{ profile.bank_card }}">
+            </div>
+            <button type="submit" class="w-full btn-primary py-3.5 rounded-xl font-bold">ثبت درخواست برداشت</button>
+        </form>
+        {% endif %}
+        
+        <p class="text-xs opacity-40 mt-4 text-center">
+            درخواست شما با وضعیت «خوانده‌نشده» ثبت می‌شود و پس از بررسی ادمین پردازش خواهد شد.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,1 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}داشبورد | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="animate-fade space-y-6">
+    <!-- Header -->
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold">سلام {{ user.first_name|default:user.username }} 👋</h1>
+            <p class="text-sm opacity-60">به داشبورد بازاریابی خوش آمدید</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="px-4 py-1.5 rounded-full text-sm font-bold level-{{ profile.level }}">
+                {% if profile.level == 'bronze' %}🥉 برنزی{% elif profile.level == 'silver' %}🥈 نقره‌ای{% else %}🥇 طلایی{% endif %}
+            </span>
+        </div>
+    </div>
 
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="glass-card p-5 stat-card">
+            <p class="text-xs opacity-50 mb-1">امتیاز</p>
+            <p class="text-2xl font-bold text-indigo-300">{{ profile.points|floatformat:0 }}</p>
+        </div>
+        <div class="glass-card p-5 stat-card">
+            <p class="text-xs opacity-50 mb-1">موجودی کیف پول</p>
+            <p class="text-2xl font-bold text-green-300">{{ profile.wallet_balance|floatformat:0 }}</p>
+            <p class="text-xs opacity-40">تومان</p>
+        </div>
+        <div class="glass-card p-5 stat-card">
+            <p class="text-xs opacity-50 mb-1">فروش موفق</p>
+            <p class="text-2xl font-bold text-yellow-300">{{ profile.total_sales }}</p>
+        </div>
+        <div class="glass-card p-5 stat-card">
+            <p class="text-xs opacity-50 mb-1">کمیسیون کل</p>
+            <p class="text-2xl font-bold text-purple-300">{{ total_commission|floatformat:0 }}</p>
+        </div>
+        <div class="glass-card p-5 stat-card">
+            <p class="text-xs opacity-50 mb-1">معرفی‌شدگان</p>
+            <p class="text-2xl font-bold text-cyan-300">{{ referred_count|default:0 }}</p>
+        </div>
+    </div>
+
+    <!-- Progress to next level -->
+    {% if profile.level != 'gold' %}
+    <div class="glass-card p-5">
+        <div class="flex justify-between text-sm mb-2">
+            <span>پیشرفت تا سطح بعدی</span>
+            <span class="opacity-70">{{ profile.total_sales }} / {% if profile.level == 'bronze' %}۱۰{% else %}۲۰{% endif %} فروش</span>
+        </div>
+        <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full progress-bar rounded-full bg-gradient-to-l from-indigo-500 to-purple-500" style="width: {{ profile.progress_percent }}%"></div>
+        </div>
+        <p class="text-xs opacity-50 mt-2">{{ profile.next_level_sales }} فروش تا ارتقا باقی مانده</p>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <a href="{% url 'referral' %}" class="glass-card p-4 text-center hover:bg-white/15 transition">
+            <div class="text-2xl mb-1">🔗</div>
+            <div class="text-sm font-medium">لینک معرف</div>
+        </a>
+        <a href="{% url 'wallet' %}" class="glass-card p-4 text-center hover:bg-white/15 transition">
+            <div class="text-2xl mb-1">💰</div>
+            <div class="text-sm font-medium">کیف پول</div>
+        </a>
+        <a href="{% url 'support' %}" class="glass-card p-4 text-center hover:bg-white/15 transition">
+            <div class="text-2xl mb-1">🛡️</div>
+            <div class="text-sm font-medium">تمدید پشتیبانی</div>
+        </a>
+        <a href="{% url 'packages' %}" class="glass-card p-4 text-center hover:bg-white/15 transition">
+            <div class="text-2xl mb-1">📦</div>
+            <div class="text-sm font-medium">خرید بسته</div>
+        </a>
+    </div>
+
+    <!-- Referral Code -->
+    <div class="glass-card p-5">
+        <h3 class="font-bold mb-3">کد و لینک معرف شما</h3>
+        <div class="flex flex-wrap gap-3 items-center">
+            <code class="bg-white/10 px-4 py-2 rounded-xl text-lg font-mono tracking-wider">{{ profile.referral_code }}</code>
+            <button onclick="navigator.clipboard.writeText('{{ request.scheme }}://{{ request.get_host }}/ref/{{ profile.referral_code }}/'); this.innerText='کپی شد!'" class="btn-primary px-4 py-2 rounded-xl text-sm">کپی لینک</button>
+        </div>
+        <p class="text-xs opacity-50 mt-2">لینک: {{ request.scheme }}://{{ request.get_host }}/ref/{{ profile.referral_code }}/</p>
+    </div>
+
+    <!-- Recent Sales -->
+    <div class="glass-card p-5">
+        <h3 class="font-bold mb-4">آخرین فروش‌های معرفی‌شده</h3>
+        {% if recent_orders %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="opacity-50 text-right border-b border-white/10">
+                        <th class="pb-2">خریدار</th>
+                        <th class="pb-2">بسته</th>
+                        <th class="pb-2">مبلغ</th>
+                        <th class="pb-2">کمیسیون</th>
+                        <th class="pb-2">تاریخ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in recent_orders %}
+                    <tr class="border-b border-white/5">
+                        <td class="py-2.5">{{ o.buyer.get_full_name|default:o.buyer.username }}</td>
+                        <td>{{ o.package.name }}</td>
+                        <td>{{ o.amount|floatformat:0 }}</td>
+                        <td class="text-green-300">+{{ o.commission_amount|floatformat:0 }}</td>
+                        <td class="opacity-50">{{ o.paid_at|date:"Y/m/d" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center opacity-50 py-6">هنوز فروشی ثبت نشده. لینک معرفت رو به اشتراک بگذار!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

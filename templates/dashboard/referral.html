@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}لینک معرف | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="animate-fade space-y-6 max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold">لینک و کد معرف</h1>
+    <div class="glass-card p-6 text-center">
+        <p class="text-sm opacity-60 mb-2">کد اختصاصی شما</p>
+        <p class="text-4xl font-mono font-bold tracking-widest text-indigo-300 mb-4">{{ profile.referral_code }}</p>
+        <div class="bg-white/5 rounded-xl p-3 text-sm break-all mb-4" id="ref-link">{{ request.scheme }}://{{ request.get_host }}/ref/{{ profile.referral_code }}/</div>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('ref-link').innerText); this.innerText='کپی شد ✓'" class="btn-primary px-6 py-2.5 rounded-xl">کپی لینک معرف</button>
+    </div>
+    <div class="glass-card p-5">
+        <h3 class="font-bold mb-3">افراد معرفی‌شده ({{ referred_users.count }})</h3>
+        {% for u in referred_users %}
+        <div class="flex flex-wrap justify-between items-center gap-2 py-3 border-b border-white/5 text-sm">
+            <div>
+                <span class="font-medium">{{ u.user.get_full_name|default:u.user.username }}</span>
+                {% if u.job_class %}<span class="opacity-50 text-xs mr-2">· {{ u.job_class }}</span>{% endif %}
+            </div>
+            <div class="flex items-center gap-2">
+                {% if u.status == 'pending' %}
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-500/20 text-red-400">بررسی‌نشده</span>
+                {% elif u.status == 'reviewed' %}
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400">بررسی‌شده</span>
+                {% elif u.status == 'purchased' %}
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-500/20 text-green-400">خریده</span>
+                {% endif %}
+                <span class="opacity-40 text-xs">{{ u.created_at|date:"Y/m/d" }}</span>
+            </div>
+        </div>
+        {% empty %}
+        <p class="opacity-50 text-center py-4">هنوز کسی با لینک شما ثبت‌نام نکرده</p>
+        {% endfor %}
+    </div>
+    <div class="glass-card p-5">
+        <h3 class="font-bold mb-3">فروش‌های موفق</h3>
+        {% for s in sales %}
+        <div class="flex justify-between py-2 border-b border-white/5 text-sm">
+            <span>{{ s.package.name }}</span>
+            <span class="text-green-300">+{{ s.commission_amount|floatformat:0 }} تومان</span>
+        </div>
+        {% empty %}
+        <p class="opacity-50 text-center py-4">فروشی ثبت نشده</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

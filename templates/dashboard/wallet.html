@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}کیف پول | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="animate-fade space-y-6 max-w-2xl mx-auto">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">کیف پول</h1>
+        {% if profile.can_withdraw %}
+        <a href="{% url 'withdraw' %}" class="btn-primary px-4 py-2 rounded-xl text-sm">درخواست برداشت</a>
+        {% endif %}
+    </div>
+    <div class="glass-card p-6 text-center">
+        <p class="text-sm opacity-60">موجودی قابل برداشت</p>
+        <p class="text-4xl font-bold text-green-300 my-2">{{ profile.wallet_balance|floatformat:0 }}</p>
+        <p class="text-sm opacity-50">تومان</p>
+        {% if not profile.can_withdraw %}
+        <p class="text-xs text-yellow-300/80 mt-3">برای برداشت باید به سطح طلایی برسید (۲۰ فروش)</p>
+        {% endif %}
+    </div>
+    <div class="glass-card p-5">
+        <h3 class="font-bold mb-3">تراکنش‌ها</h3>
+        {% for t in transactions %}
+        <div class="flex justify-between py-2.5 border-b border-white/5 text-sm">
+            <div>
+                <span>{{ t.get_type_display }}</span>
+                <p class="text-xs opacity-40">{{ t.description }}</p>
+            </div>
+            <div class="text-left">
+                <span class="{% if t.amount > 0 %}text-green-300{% else %}text-red-300{% endif %}">{% if t.amount > 0 %}+{% endif %}{{ t.amount|floatformat:0 }}</span>
+                <p class="text-xs opacity-40">{{ t.created_at|date:"m/d H:i" }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="opacity-50 text-center py-4">تراکنشی وجود ندارد</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

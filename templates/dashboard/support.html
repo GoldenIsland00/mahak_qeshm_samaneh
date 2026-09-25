@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}تمدید پشتیبانی | افیلیت پرو{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto animate-fade space-y-6">
+    <h1 class="text-2xl font-bold">درخواست تمدید پشتیبانی</h1>
+    <div class="glass-card p-4 text-center">
+        <p class="text-sm opacity-60">امتیاز فعلی شما</p>
+        <p class="text-3xl font-bold text-indigo-300">{{ profile.points|floatformat:0 }}</p>
+    </div>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for p in packages %}
+        <label class="glass-card p-4 flex items-center gap-4 cursor-pointer hover:bg-white/10 transition has-[:checked]:border-indigo-400">
+            <input type="radio" name="package" value="{{ p.id }}" required class="accent-indigo-500">
+            <div class="flex-1">
+                <p class="font-bold">{{ p.name }}</p>
+                <p class="text-sm opacity-60">قیمت پشتیبانی: {{ p.support_price|floatformat:0 }} امتیاز</p>
+            </div>
+            {% if profile.points >= p.support_price %}
+            <span class="text-xs text-green-300">قابل درخواست</span>
+            {% else %}
+            <span class="text-xs text-red-300">امتیاز کم</span>
+            {% endif %}
+        </label>
+        {% endfor %}
+        <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold">ثبت درخواست</button>
+    </form>
+    <p class="text-xs opacity-50 text-center">نکته: امتیاز مصرف‌شده از موجودی شما کسر می‌شود. در سطح برنزی این تنها راه استفاده از امتیاز است.</p>
+</div>
+{% endblock %}
