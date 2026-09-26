@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-affiliate-pwa-2026-professional-key-change-in-prod
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['mahak-qeshm-samaneh-2.onrender.com', 'www.mahak-qeshm-samaneh-2.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
